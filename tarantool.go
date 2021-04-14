@@ -89,6 +89,15 @@ func (TARANTOOL) Call(conn *tarantool.Connection, fnName string, args interface{
 	return resp
 }
 
+// Call17 calls registered tarantool function
+func (TARANTOOL) Call17(conn *tarantool.Connection, fnName string, args interface{}) *tarantool.Response {
+	resp, err := conn.Call17(fnName, args)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return resp
+}
+
 // Eval passes lua expression for evaluation
 func (TARANTOOL) Eval(conn *tarantool.Connection, expr string, args interface{}) *tarantool.Response {
 	resp, err := conn.Eval(expr, args)
