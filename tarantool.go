@@ -15,7 +15,7 @@ func init() {
 type TARANTOOL struct{}
 
 // Connect creates a new Tarantool connection
-func Connect(addr string, opts tarantool.Opts) *tarantool.Connection {
+func (TARANTOOL) Connect(addr string, opts tarantool.Opts) *tarantool.Connection {
 	if addr == "" {
 		addr = "localhost:3301"
 	}
