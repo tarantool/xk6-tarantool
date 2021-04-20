@@ -1,108 +1,106 @@
 package tarantool
 
 import (
-	"fmt"
-
 	"github.com/loadimpact/k6/js/modules"
 	"github.com/tarantool/go-tarantool"
 )
 
 func init() {
-	modules.Register("k6/x/tarantool", new(TARANTOOL))
+	modules.Register("k6/x/tarantool", new(Tarantool))
 }
 
-// TARANTOOL is the k6 Tarantool extension
-type TARANTOOL struct{}
+// Tarantool is the k6 Tarantool extension
+type Tarantool struct{}
 
 // Connect creates a new Tarantool connection
-func (TARANTOOL) Connect(addr string, opts tarantool.Opts) *tarantool.Connection {
+func (Tarantool) Connect(addr string, opts tarantool.Opts) (*tarantool.Connection, error) {
 	if addr == "" {
 		addr = "localhost:3301"
 	}
 	conn, err := tarantool.Connect(addr, opts)
 	if err != nil {
-		return nil
+		return nil, err
 	}
-	return conn
+	return conn, nil
 }
 
 // Select performs select to box.space
-func (TARANTOOL) Select(conn *tarantool.Connection, space, index interface{}, offset, limit, iterator uint32, key interface{}) *tarantool.Response {
+func (Tarantool) Select(conn *tarantool.Connection, space, index interface{}, offset, limit, iterator uint32, key interface{}) (*tarantool.Response, error) {
 	resp, err := conn.Select(space, index, offset, limit, iterator, key)
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
-	return resp
+	return resp, err
 }
 
 // Insert performs insertion to box.space
-func (TARANTOOL) Insert(conn *tarantool.Connection, space, data interface{}) *tarantool.Response {
+func (Tarantool) Insert(conn *tarantool.Connection, space, data interface{}) (*tarantool.Response, error) {
 	resp, err := conn.Insert(space, data)
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
-	return resp
+	return resp, err
 }
 
 // Replace performs "insert or replace" action to box.space
-func (TARANTOOL) Replace(conn *tarantool.Connection, space, data interface{}) *tarantool.Response {
+func (Tarantool) Replace(conn *tarantool.Connection, space, data interface{}) (*tarantool.Response, error) {
 	resp, err := conn.Replace(space, data)
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
-	return resp
+	return resp, err
 }
 
 // Delete performs deletion of a tuple by key
-func (TARANTOOL) Delete(conn *tarantool.Connection, space, index, key interface{}) *tarantool.Response {
+func (Tarantool) Delete(conn *tarantool.Connection, space, index, key interface{}) (*tarantool.Response, error) {
 	resp, err := conn.Delete(space, index, key)
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
-	return resp
+	return resp, err
 }
 
 // Update performs update of a tuple by key
-func (TARANTOOL) Update(conn *tarantool.Connection, space, index, key, ops interface{}) *tarantool.Response {
+func (Tarantool) Update(conn *tarantool.Connection, space, index, key, ops interface{}) (*tarantool.Response, error) {
 	resp, err := conn.Update(space, index, key, ops)
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
-	return resp
+	return resp, err
 }
 
 // Upsert performs "update or insert" action of a tuple by key
-func (TARANTOOL) Upsert(conn *tarantool.Connection, space, tuple, ops interface{}) *tarantool.Response {
+func (Tarantool) Upsert(conn *tarantool.Connection, space, tuple, ops interface{}) (*tarantool.Response, error) {
 	resp, err := conn.Upsert(space, tuple, ops)
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
-	return resp
+	return resp, err
 }
 
 // Call calls registered tarantool function
-func (TARANTOOL) Call(conn *tarantool.Connection, fnName string, args interface{}) *tarantool.Response {
+func (Tarantool) Call(conn *tarantool.Connection, fnName string, args interface{}) (*tarantool.Response, error) {
 	resp, err := conn.Call(fnName, args)
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
-	return resp
+	return resp, err
 }
 
 // Call17 calls registered tarantool function
-func (TARANTOOL) Call17(conn *tarantool.Connection, fnName string, args interface{}) *tarantool.Response {
+func (Tarantool) Call17(conn *tarantool.Connection, fnName string, args interface{}) (*tarantool.Response, error) {
 	resp, err := conn.Call17(fnName, args)
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
-	return resp
+	return resp, err
 }
 
 // Eval passes lua expression for evaluation
-func (TARANTOOL) Eval(conn *tarantool.Connection, expr string, args interface{}) *tarantool.Response {
+func (Tarantool) Eval(conn *tarantool.Connection, expr string, args interface{}) (*tarantool.Response, error) {
 	resp, err := conn.Eval(expr, args)
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
-	return resp
+	return resp, err
 }
