@@ -9,8 +9,22 @@ func init() {
 	modules.Register("k6/x/tarantool", new(Tarantool))
 }
 
+var (
+	chCallFutures = make(chan *tarantool.Future, 4096)
+)
+
 // Tarantool is the k6 Tarantool extension
 type Tarantool struct{}
+
+func (Tarantool) ResolveCallFutures() {
+	go func() {
+		for fut := range chCallFutures {
+			if _, err := fut.Get(); err != nil {
+				panic(err)
+			}
+		}
+	}()
+}
 
 // Connect creates a new Tarantool connection
 func (Tarantool) Connect(addr string, opts tarantool.Opts) (*tarantool.Connection, error) {
@@ -85,6 +99,10 @@ func (Tarantool) Call(conn *tarantool.Connection, fnName string, args interface{
 		return nil, err
 	}
 	return resp, err
+}
+
+func (Tarantool) CallAsyncNoReturn(conn *tarantool.Connection, fnName string, args interface{}) {
+	chCallFutures <- conn.CallAsync(fnName, args)
 }
 
 // Call17 calls registered tarantool function
