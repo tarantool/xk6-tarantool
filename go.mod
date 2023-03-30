@@ -1,4 +1,4 @@
-module github.com/WeCodingNow/xk6-tarantool
+module github.com/tarantool/xk6-tarantool
 
 go 1.16
 
