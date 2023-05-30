@@ -23,7 +23,7 @@ Then:
 2. Build the binary:
   ```shell
   CGO_ENABLED=1 go run ./cmd/xk6/main.go build master \
-    --with github.com/hackfeed/xk6-tarantool
+    --with github.com/tarantool/xk6-tarantool
   ```
 
 ## Example
