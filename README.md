@@ -7,7 +7,10 @@ This is a [k6](https://github.com/loadimpact/k6) extension using the [xk6](https
 
 ## Build
 
-To build a `k6` binary with this extension, first ensure you have the prerequisites:
+To build a `k6` binary with this extension, you have two options.
+
+### Local build
+First ensure you have the prerequisites:
 
 - [Go toolchain](https://go101.org/article/go-toolchain.html)
 - Git
@@ -23,7 +26,20 @@ Then:
 2. Build the binary:
   ```shell
   CGO_ENABLED=1 go run ./cmd/xk6/main.go build master \
-    --with github.com/hackfeed/xk6-tarantool
+    --with github.com/tarantool/xk6-tarantool
+  ```
+### Using Docker
+The following will produce a `k6` executable.
+  ```shell
+  sudo docker run -e XK6_BUILD_FLAGS="-tags go_tarantool_ssl_disable -ldflags='-w -s'" \
+    --rm -it -u "$(id -u):$(id -g)" -v "${PWD}:/xk6" grafana/xk6 build v0.43.1 \
+    --with github.com/tarantool/xk6-tarantool
+  ```
+
+In case your platform matches the Linux amd64 you can run the `k6` locally,
+otherwise you can reuse the same docker image to run your load:
+  ```shell
+  docker run --entrypoint ./k6 -i --rm -it -u "$(id -u):$(id -g)" -v "${PWD}:/xk6" grafana/xk6 run test.js
   ```
 
 ## Example
